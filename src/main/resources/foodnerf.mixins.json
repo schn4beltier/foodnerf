@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.schn4beltier.foodnerf.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "foodnerf.refmap.json",
+  "mixins": [
+    "FoodMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
