@@ -1,5 +1,6 @@
 package net.schn4beltier.foodnerf;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -8,7 +9,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.
 // Demonstrates how to use Forge's config APIs
-@Mod.EventBusSubscriber(modid = Foodnerf.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = FoodNerf.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
@@ -42,22 +42,31 @@ public class Config {
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLIST = BUILDER
             .comment("List of all items to not be affected by the mod.")
             .comment("Example: [\"minecraft:golden_apple\"")
-            .defineListAllowEmpty("blacklist", List.of(), obj -> obj instanceof String);
+            .defineListAllowEmpty("blacklist", List.of(), Config::validateString);
 
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
     public static double nutritionMultiplier;
     public static double saturationMultiplier;
     public static Set<String> namespaces;
-    public static Set<String> blacklist;
+    public static Set<Item> blacklist;
 
-
+    private static boolean validateString(Object o) {
+        if (o instanceof String) {
+            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation((String) o));
+            if (item != null) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         nutritionMultiplier = NUTRITION_MULTIPLIER.get();
         saturationMultiplier = SATURATION_MULTIPLIER.get();
         namespaces = new HashSet<>(NAMESPACES.get());
-        blacklist = new HashSet<>(BLACKLIST.get());
+        blacklist = BLACKLIST.get().stream().map(itemName -> BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(itemName))).collect(Collectors.toSet());
     }
+
 }
