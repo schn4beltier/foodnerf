@@ -16,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Set;
+
 @Mixin(Item.class)
 public class ItemAccessor implements IForgeItem {
 
@@ -34,8 +36,10 @@ public class ItemAccessor implements IForgeItem {
         var self = (Item) (Object) this;
         FoodProperties fp =  foodProperties;
         String namespace = self.getCreatorModId(self.getDefaultInstance());
-        if (fp != null) {
-            if(Config.namespaces.contains(namespace) && !Config.blacklist.contains(self)) {
+        Set<String> namespaces = Config.namespaces;
+        Set<Item> blacklist = Config.blacklist;
+        if (fp != null && namespaces != null && blacklist != null) {
+            if(namespaces.contains(namespace) && !blacklist.contains(self)) {
                 FoodProperties.Builder newFP = new FoodProperties.Builder();
 
                 newFP.nutrition((int) (fp.getNutrition() * Config.nutritionMultiplier));
