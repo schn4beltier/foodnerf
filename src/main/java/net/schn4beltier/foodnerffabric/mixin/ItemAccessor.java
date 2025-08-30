@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -54,6 +55,7 @@ public class ItemAccessor {
         cir.setReturnValue(fc);
     }
 
+    @Unique
     private Set<Item> itemFromString(Set<String> strings) {
         Set<Item> items = new HashSet<>();
         for(String s : strings) {

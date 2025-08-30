@@ -2,8 +2,6 @@ package net.schn4beltier.foodnerffabric.config;
 
 import blue.endless.jankson.Comment;
 import io.wispforest.owo.config.annotation.Config;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 
 import java.util.Set;
 @Config(name="foodnerfconfig", wrapperName = "FoodNerfConfig")
