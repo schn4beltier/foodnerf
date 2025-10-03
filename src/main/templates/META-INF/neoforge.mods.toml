@@ -29,7 +29,7 @@ side = "BOTH"
 
 [[dependencies."${mod_id}"]]
 modId = "quality_food"
-mandatory = false
-versionRange = "2.2.5"
+type = "optional"
+versionRange = ""
 ordering = "AFTER"
 side = "BOTH"
